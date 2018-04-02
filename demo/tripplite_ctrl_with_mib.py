@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #
-# Last Change: Mon Apr 02, 2018 at 05:36 PM -0400
+# Last Change: Mon Apr 02, 2018 at 05:38 PM -0400
 
 import sys
 from os.path import dirname, abspath, join
@@ -20,7 +20,7 @@ compiler.addMibCompiler(mibBuilder, sources=[
     'http://mibs.snmplabs.com/asn1/@mib@'])
 
 # Load mib
-mibBuilder.loadModules('TRIPPLITE-PRODUCTS', 'TRIPPLITE')
+mibBuilder.loadModules('TRIPPLITE-PRODUCTS')
 
 # Get the name of the SMTP command that will be executed
 cmd = ObjectIdentity('TRIPPLITE-PRODUCTS', sys.argv[1], 0)
