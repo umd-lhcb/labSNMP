@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #
-# Last Change: Mon Apr 02, 2018 at 05:34 PM -0400
+# Last Change: Mon Apr 02, 2018 at 05:36 PM -0400
 
 import sys
 from os.path import dirname, abspath, join
@@ -23,15 +23,15 @@ compiler.addMibCompiler(mibBuilder, sources=[
 mibBuilder.loadModules('TRIPPLITE-PRODUCTS', 'TRIPPLITE')
 
 # Get the name of the SMTP command that will be executed
-cmd = ObjectIdentity('TRIPPLITE-PRODUCTS', sys.argv[2], 0)
+cmd = ObjectIdentity('TRIPPLITE-PRODUCTS', sys.argv[1], 0)
 
 # Perform lookup
 g = getCmd(SnmpEngine(),
-           CommunityData('public'),
+           CommunityData('tripplite'),
            UdpTransportTarget((sys.argv[2], 161)),
            ContextData(),
            ObjectType(cmd))
-next(g)
+print(next(g))
 
 # Printout the result
 print(str(cmd))
