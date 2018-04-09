@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #
-# Last Change: Mon Apr 09, 2018 at 12:54 PM -0400
+# Last Change: Mon Apr 09, 2018 at 06:05 PM -0400
 
 import sys
 from os.path import dirname, abspath, join
@@ -22,7 +22,22 @@ compiler.addMibCompiler(mibBuilder, sources=[
 mibBuilder.loadModules('TRIPPLITE-PRODUCTS')
 
 oidtype = ObjectType(ObjectIdentity('TRIPPLITE-PRODUCTS',
-                                    'tlpDeviceNumDevices', 0))
+                                    'tlpCooling'))
+# On the trailing numbers:
+#   A scalar type OID has only one entry, and should always followed by a '0.
+#
+
+# tlpAtsOutputCurrent
+# tlpAtsInputPhaseCurrent
+# tlpDeviceTable
+# tlpDeviceNumDevices
+# tlpEnvIdentEntry
+# tlpPduHeatsinkIndex
+# tlpPduHeatsinkTable
+# tlpPduHeatsinkEntry
+# tlpPduHeatsinkTemperatureF
+# tlpPduHeatsinkTemperatureC
+# tlpPduControlPduOff
 
 someCmd = nextCmd if len(sys.argv) > 2 and sys.argv[2] == 'loop' else getCmd
 querycmd = someCmd(SnmpEngine(),
