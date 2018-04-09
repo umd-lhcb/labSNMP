@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #
-# Last Change: Mon Apr 02, 2018 at 05:38 PM -0400
+# Last Change: Mon Apr 09, 2018 at 12:10 AM -0400
 
 import sys
 from os.path import dirname, abspath, join
@@ -10,7 +10,7 @@ from pysnmp.smi import builder, view, compiler
 
 # The absolute path of the mib files
 mib_path = 'file://' + join(
-    dirname(dirname(abspath(__file__))), 'MIB', 'Tripp_Lite')
+    dirname(dirname(abspath(__file__))), 'labSNMP', 'MIB', 'Tripp_Lite')
 
 # Compile mib
 mibBuilder = builder.MibBuilder()
