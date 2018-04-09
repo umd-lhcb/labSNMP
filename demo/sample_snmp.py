@@ -9,7 +9,7 @@ oidtype = ObjectType(ObjectIdentity('SNMPv2-MIB', 'sysDescr', 0), 'Test')
 # if we replace 'getCmd' with 'nextCmd', we will loop through all commands
 # presented in the 'SNMPv2' mib file.
 querycmd = getCmd(SnmpEngine(),
-                  CommunityData('public'),
+                  CommunityData('tripplite'),
                   UdpTransportTarget((sys.argv[1], 161)),
                   ContextData(),
                   oidtype)

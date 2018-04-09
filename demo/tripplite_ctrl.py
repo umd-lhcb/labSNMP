@@ -1,12 +1,12 @@
 #!/usr/bin/env python
 #
-# Last Change: Mon Apr 09, 2018 at 12:10 AM -0400
+# Last Change: Mon Apr 09, 2018 at 12:54 PM -0400
 
 import sys
 from os.path import dirname, abspath, join
 
 from pysnmp.hlapi import *
-from pysnmp.smi import builder, view, compiler
+from pysnmp.smi import builder, compiler
 
 # The absolute path of the mib files
 mib_path = 'file://' + join(
@@ -14,7 +14,6 @@ mib_path = 'file://' + join(
 
 # Compile mib
 mibBuilder = builder.MibBuilder()
-mibViewController = view.MibViewController(mibBuilder)
 compiler.addMibCompiler(mibBuilder, sources=[
     mib_path,
     'http://mibs.snmplabs.com/asn1/@mib@'])
@@ -22,16 +21,32 @@ compiler.addMibCompiler(mibBuilder, sources=[
 # Load mib
 mibBuilder.loadModules('TRIPPLITE-PRODUCTS')
 
-# Get the name of the SMTP command that will be executed
-cmd = ObjectIdentity('TRIPPLITE-PRODUCTS', sys.argv[1], 0)
+oidtype = ObjectType(ObjectIdentity('TRIPPLITE-PRODUCTS',
+                                    'tlpDeviceNumDevices', 0))
 
-# Perform lookup
-g = getCmd(SnmpEngine(),
-           CommunityData('tripplite'),
-           UdpTransportTarget((sys.argv[2], 161)),
-           ContextData(),
-           ObjectType(cmd))
-print(next(g))
+someCmd = nextCmd if len(sys.argv) > 2 and sys.argv[2] == 'loop' else getCmd
+querycmd = someCmd(SnmpEngine(),
+                  CommunityData('tripplite'),
+                  UdpTransportTarget((sys.argv[1], 161)),
+                  ContextData(),
+                  oidtype)
 
-# Printout the result
-print(str(cmd))
+# Perform lookup, traverse the whole mib file
+for (errorIndication,
+     errorStatus,
+     errorIndex,
+     varBinds) in querycmd:
+
+    if errorIndication:
+        print(errorIndication)
+        break
+
+    elif errorStatus:
+        print('%s at %s' % (errorStatus.prettyPrint(),
+                      errorIndex and varBinds[int(errorIndex) - 1][0] or
+                      '?'))
+        break
+
+    else:
+        for varBind in varBinds:
+            print(' = '.join([x.prettyPrint() for x in varBind]))
