@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #
-# Last Change: Tue Apr 10, 2018 at 12:23 AM -0400
+# Last Change: Tue Apr 10, 2018 at 03:21 PM -0400
 
 from os.path import dirname, abspath, join
 from argparse import HelpFormatter, ArgumentParser
@@ -66,6 +66,14 @@ def parse_input():
         '''
     )
 
+    parser.add_argument(
+        '-v', '--variable-set',
+        dest='var', nargs='?',
+        help='''
+        specify the value that needs to be set when -s, --set flag is provided.
+        '''
+    )
+
     return parser.parse_args()
 
 
@@ -100,7 +108,11 @@ if __name__ == "__main__":
     # Load MIB
     mibBuilder.loadModules('TRIPPLITE-PRODUCTS')
 
-    oidtype = ObjectType(ObjectIdentity(*args.oids))
+    if args.var is not None:
+        oidtype = ObjectType(ObjectIdentity(*args.oids), args.var)
+    else:
+        oidtype = ObjectType(ObjectIdentity(*args.oids))
+
     queryCmd = findCmd(args.mode)(
         SnmpEngine(),
         CommunityData(args.community),
