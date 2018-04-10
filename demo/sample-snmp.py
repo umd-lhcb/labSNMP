@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #
-# Last Change: Mon Apr 09, 2018 at 10:03 PM -0400
+# Last Change: Tue Apr 10, 2018 at 12:12 AM -0400
 
 import sys
 from pysnmp.hlapi import *
@@ -11,6 +11,7 @@ oidtype = ObjectType(ObjectIdentity('SNMPv2-MIB', 'sysDescr', 0), 'Test')
 
 # if we replace 'getCmd' with 'nextCmd', we will loop through all commands
 # presented in the 'SNMPv2' mib file.
+# An example SNMP server is 'demo.snmplabs.com'
 querycmd = getCmd(SnmpEngine(),
                   CommunityData('tripplite'),
                   UdpTransportTarget((sys.argv[1], 161)),

@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #
-# Last Change: Tue Apr 10, 2018 at 12:08 AM -0400
+# Last Change: Tue Apr 10, 2018 at 12:23 AM -0400
 
 from os.path import dirname, abspath, join
 from argparse import HelpFormatter, ArgumentParser
@@ -29,14 +29,6 @@ def parse_input():
         dest='host', nargs=1, required=True,
         help='''
         specify the target remote host.
-        '''
-    )
-
-    required.add_argument(
-        '-l', '--load-module',
-        dest='module', nargs=1, required=True,
-        help='''
-        specify the MIB module that should be loaded.
         '''
     )
 
@@ -106,30 +98,38 @@ if __name__ == "__main__":
         'http://mibs.snmplabs.com/asn1/@mib@'])
 
     # Load MIB
-    mibBuilder.loadModules(args.module[0])
+    mibBuilder.loadModules('TRIPPLITE-PRODUCTS')
 
     oidtype = ObjectType(ObjectIdentity(*args.oids))
-    queryCMD = findCmd(args.mode)(SnmpEngine(),
-                                  CommunityData(args.community),
-                                  UdpTransportTarget((args.host, 161)),
-                                  ContextData(),
-                                  oidtype)
+    queryCmd = findCmd(args.mode)(
+        SnmpEngine(),
+        CommunityData(args.community),
+        UdpTransportTarget((args.host[0], 161)),
+        ContextData(),
+        oidtype)
 
-    for (errorIndication,
-        errorStatus,
-        errorIndex,
-        varBinds) in querycmd:
+    try:
+        for (errorIndication,
+             errorStatus,
+             errorIndex,
+             varBinds) in queryCmd:
 
-        if errorIndication:
-            print(errorIndication)
-            break
+            if errorIndication:
+                print(errorIndication)
+                break
 
-        elif errorStatus:
-            print('%s at %s' % (errorStatus.prettyPrint(),
-                        errorIndex and varBinds[int(errorIndex) - 1][0] or
-                        '?'))
-            break
+            elif errorStatus:
+                print('%s at %s' % (errorStatus.prettyPrint(),
+                            errorIndex and varBinds[int(errorIndex) - 1][0] or
+                            '?'))
+                break
 
-        else:
-            for varBind in varBinds:
-                print(' = '.join([x.prettyPrint() for x in varBind]))
+            else:
+                for varBind in varBinds:
+                    print(' = '.join([x.prettyPrint() for x in varBind]))
+
+    except KeyboardInterrupt:
+        pass
+
+    except Exception as err:
+        print(err)
