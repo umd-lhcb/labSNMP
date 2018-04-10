@@ -1,9 +1,12 @@
 #!/usr/bin/env python
+#
+# Last Change: Mon Apr 09, 2018 at 10:03 PM -0400
 
 import sys
 from pysnmp.hlapi import *
 
-# The 'Test' parameter shows how to pass a argument to the command.
+# The 'Test' parameter shows how to pass a argument to the command, when using
+# 'setCmd'
 oidtype = ObjectType(ObjectIdentity('SNMPv2-MIB', 'sysDescr', 0), 'Test')
 
 # if we replace 'getCmd' with 'nextCmd', we will loop through all commands
