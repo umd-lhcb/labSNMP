@@ -1,8 +1,11 @@
 #!/usr/bin/env python
 #
-# Last Change: Mon Apr 09, 2018 at 11:20 PM -0400
+# Last Change: Tue Apr 10, 2018 at 12:08 AM -0400
 
+from os.path import dirname, abspath, join
 from argparse import HelpFormatter, ArgumentParser
+from pysnmp.hlapi import *
+from pysnmp.smi import builder, compiler
 
 
 class SmartFormatter(HelpFormatter):
@@ -17,6 +20,24 @@ def parse_input():
     parser = ArgumentParser(
         description='Perform SNMP lookup, walk through, and value set.',
         formatter_class=SmartFormatter
+    )
+
+    required = parser.add_argument_group('required arguments')
+
+    required.add_argument(
+        '-t', '--target-host',
+        dest='host', nargs=1, required=True,
+        help='''
+        specify the target remote host.
+        '''
+    )
+
+    required.add_argument(
+        '-l', '--load-module',
+        dest='module', nargs=1, required=True,
+        help='''
+        specify the MIB module that should be loaded.
+        '''
     )
 
     parser.add_argument(
@@ -56,5 +77,59 @@ def parse_input():
     return parser.parse_args()
 
 
+def findCmd(mode):
+    cmd_dict = {'walkthrough': nextCmd,
+                'lookup': getCmd,
+                'set': setCmd}
+    return cmd_dict[mode]
+
+
+def isInt(s):
+    try:
+        return int(s)
+
+    except ValueError:
+        return s
+
+
 if __name__ == "__main__":
     args = parse_input()
+
+    # Specify the absolute path of the MIB files
+    tripplite_mib_path = 'file://' + join(
+        dirname(dirname(abspath(__file__))), 'labSNMP', 'MIB', 'Tripp_Lite')
+
+    # Compile MIB
+    mibBuilder = builder.MibBuilder()
+    compiler.addMibCompiler(mibBuilder, sources=[
+        tripplite_mib_path,
+        'http://mibs.snmplabs.com/asn1/@mib@'])
+
+    # Load MIB
+    mibBuilder.loadModules(args.module[0])
+
+    oidtype = ObjectType(ObjectIdentity(*args.oids))
+    queryCMD = findCmd(args.mode)(SnmpEngine(),
+                                  CommunityData(args.community),
+                                  UdpTransportTarget((args.host, 161)),
+                                  ContextData(),
+                                  oidtype)
+
+    for (errorIndication,
+        errorStatus,
+        errorIndex,
+        varBinds) in querycmd:
+
+        if errorIndication:
+            print(errorIndication)
+            break
+
+        elif errorStatus:
+            print('%s at %s' % (errorStatus.prettyPrint(),
+                        errorIndex and varBinds[int(errorIndex) - 1][0] or
+                        '?'))
+            break
+
+        else:
+            for varBind in varBinds:
+                print(' = '.join([x.prettyPrint() for x in varBind]))
