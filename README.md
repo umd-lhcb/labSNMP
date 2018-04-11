@@ -1,4 +1,9 @@
-# For controlling the Tripp Lite power supply
+# Compile a MIB file to a Python file
+```
+mibdump.py --mib-source . --mib-source http://mibs.snmplabs.com/asn1/@mib@ --destination-directory . <mib_filename>
+```
+
+# Control the Tripp Lite power supply
 ## First available command
 `tlpDeviceNumDevices`
 
