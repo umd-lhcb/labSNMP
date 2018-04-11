@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #
-# Last Change: Wed Apr 11, 2018 at 02:28 PM -0400
+# Last Change: Wed Apr 11, 2018 at 02:45 PM -0400
 
 from os import environ
 from os.path import dirname, abspath, join
@@ -101,7 +101,9 @@ if __name__ == "__main__":
     ansi_mib_path = 'file:///' + join(lib_path, 'MIB')
     py_mib_path = join(lib_path, 'compiled')
 
-    # Use environmental variables to enable pysnmp to load compiled mibs
+    # FIXME: Use environmental variables to enable pysnmp to load compiled mibs
+    # I've tried to use addMibSources, and it can load the file in advance, but
+    # it just refuses to use it.
     environ['PYSNMP_MIB_PKGS'] = py_mib_path
 
     mibBuilder = builder.MibBuilder()
