@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #
-# Last Change: Wed Apr 11, 2018 at 02:21 PM -0400
+# Last Change: Wed Apr 11, 2018 at 02:28 PM -0400
 
 from os import environ
 from os.path import dirname, abspath, join
@@ -108,6 +108,9 @@ if __name__ == "__main__":
     compiler.addMibCompiler(mibBuilder, sources=[
         ansi_mib_path,
         'http://mibs.snmplabs.com/asn1/@mib@'])
+
+    # FIXME: If non-precompiled MIB is needed, it must be loaded first
+    # mibBuilder.loadModules('WIENER-CRATE-MIB')
 
     if args.var is not None:
         oidtype = ObjectType(ObjectIdentity(*args.oids), args.var)
