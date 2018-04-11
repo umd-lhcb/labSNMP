@@ -3,8 +3,10 @@
 `tlpDeviceNumDevices`
 
 ## Some interesting commands
-`tlpPduCircuitTotalCurrent`
-`tlpPduControlRamp`
+```
+tlpPduCircuitTotalCurrent
+tlpPduControlRamp
+```
 
 ## To control all channels
 Set state (an integer) to `tlpPduDeviceMainLoadCommand.1`
