@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 #
-# Last Change: Tue Apr 10, 2018 at 03:21 PM -0400
+# Last Change: Wed Apr 11, 2018 at 02:21 PM -0400
 
+from os import environ
 from os.path import dirname, abspath, join
 from argparse import HelpFormatter, ArgumentParser
 from pysnmp.hlapi import *
@@ -96,17 +97,17 @@ if __name__ == "__main__":
     args = parse_input()
 
     # Specify the absolute path of the MIB files
-    tripplite_mib_path = 'file://' + join(
-        dirname(dirname(abspath(__file__))), 'labSNMP', 'MIB', 'Tripp_Lite')
+    lib_path = join(dirname(dirname(abspath(__file__))), 'labSNMP')
+    ansi_mib_path = 'file:///' + join(lib_path, 'MIB')
+    py_mib_path = join(lib_path, 'compiled')
 
-    # Compile MIB
+    # Use environmental variables to enable pysnmp to load compiled mibs
+    environ['PYSNMP_MIB_PKGS'] = py_mib_path
+
     mibBuilder = builder.MibBuilder()
     compiler.addMibCompiler(mibBuilder, sources=[
-        tripplite_mib_path,
+        ansi_mib_path,
         'http://mibs.snmplabs.com/asn1/@mib@'])
-
-    # Load MIB
-    mibBuilder.loadModules('TRIPPLITE-PRODUCTS')
 
     if args.var is not None:
         oidtype = ObjectType(ObjectIdentity(*args.oids), args.var)
