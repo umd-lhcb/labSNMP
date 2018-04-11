@@ -4,11 +4,9 @@ mibdump.py --mib-source . --mib-source http://mibs.snmplabs.com/asn1/@mib@ --des
 ```
 
 # Control the Tripp Lite power supply
-## First available command
-`tlpDeviceNumDevices`
-
 ## Some interesting commands
 ```
+tlpDeviceNumDevices
 tlpPduCircuitTotalCurrent
 tlpPduControlRamp
 ```
