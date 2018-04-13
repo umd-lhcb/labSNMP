@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #
-# Last Change: Fri Apr 13, 2018 at 12:14 PM -0400
+# Last Change: Fri Apr 13, 2018 at 12:25 PM -0400
 
 from os import environ
 from os.path import dirname, abspath, join
@@ -44,6 +44,7 @@ class BasePowerSupplyControl(object):
             ContextData(),
             oidtype
         )
+        status = []
 
         try:
             for (errorIndication,
@@ -52,20 +53,23 @@ class BasePowerSupplyControl(object):
                  varBinds) in queryCmd:
 
                 if errorIndication:
-                    return errorIndication
+                    status.append(1)
+                    return status.append(errorIndication)
 
                 elif errorStatus:
-                    return errorStatus
+                    status.append(2)
+                    return status.append(errorStatus)
 
                 else:
-                    status = [0, ]
+                    status.append(0)
                     for varBind in varBinds:
                         for x in varBind:
                             status.append(x.prettyPrint())
                     return status
 
         except Exception as err:
-            return err
+            status.append(255)
+            return status.append(err)
 
     def PowerOffCh(self, ch_num):
         pass

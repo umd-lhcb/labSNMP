@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #
-# Last Change: Fri Apr 13, 2018 at 12:14 PM -0400
+# Last Change: Fri Apr 13, 2018 at 12:21 PM -0400
 
 from pysnmp.hlapi import *
 
@@ -26,6 +26,4 @@ class TrippLiteControl(BasePowerSupplyControl):
         oidPowerOff = OjectType(ObjectIdentity(self.MIB, self.ch_ctrl),
                                 self.power_status_code['off']
                                 )
-        status = self.DoCmd(setCmd, oidPowerOff)
-
-        print(status)
+        return self.DoCmd(setCmd, oidPowerOff)
