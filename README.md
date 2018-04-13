@@ -3,6 +3,7 @@ Tested with `Python 2.7.13`.
 If only the command line control is need, use `pip` to install `pysnmp`.
 
 # Compile a MIB file to a Python file
+Suppose both your source ANSI MIB file and target output director are `.`:
 ```
 mibdump.py --mib-source . --mib-source http://mibs.snmplabs.com/asn1/@mib@ --destination-directory . <mib_filename>
 ```

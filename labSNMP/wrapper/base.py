@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #
-# Last Change: Fri Apr 13, 2018 at 12:08 PM -0400
+# Last Change: Fri Apr 13, 2018 at 12:14 PM -0400
 
 from os import environ
 from os.path import dirname, abspath, join
@@ -23,9 +23,9 @@ class BasePowerSupplyControl(object):
     community = 'public'
     total_chs = 0
     power_status_code = BiDict({
-        'on':    0,
-        'off':   1,
-        'cycle': 2
+        'on':    '0',
+        'off':   '1',
+        'cycle': '2'
     })
 
     def __init__(self, ip):

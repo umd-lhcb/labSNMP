@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #
-# Last Change: Fri Apr 13, 2018 at 12:09 PM -0400
+# Last Change: Fri Apr 13, 2018 at 12:14 PM -0400
 
 from pysnmp.hlapi import *
 
@@ -11,10 +11,10 @@ class TrippLiteControl(BasePowerSupplyControl):
     community = 'tripplite'
     total_chs = 14
     power_status_code = BiDict({
-        'idle':  0,
-        'off':   1,
-        'on':    2,
-        'cycle': 3
+        'idle':  '0',
+        'off':   '1',
+        'on':    '2',
+        'cycle': '3'
     })
 
     MIB = 'TRIPPLITE-PRODUCTS'
