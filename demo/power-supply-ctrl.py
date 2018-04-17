@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #
-# Last Change: Tue Apr 17, 2018 at 12:31 AM -0400
+# Last Change: Tue Apr 17, 2018 at 12:49 AM -0400
 
 from argparse import ArgumentParser
 
@@ -8,6 +8,7 @@ import sys
 sys.path.insert(0, '..')
 
 from labSNMP.wrapper.TrippLite import TrippLiteControl
+from labSNMP.wrapper.Wiener import WienerControl
 
 
 def parse_input():
@@ -102,7 +103,6 @@ if __name__ == "__main__":
         worker = InputToPduAction(controller, args.action)
         worker.do()
     elif args.mode == 'wiener':
-        pass
-        # controller = TrippLiteControl(args.host[0])
-        # worker = InputToPduAction(controller, args.action)
-        # worker.do()
+        controller = WienerControl(args.host[0])
+        worker = InputToPduAction(controller, args.action)
+        worker.do()
