@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #
-# Last Change: Tue Apr 17, 2018 at 12:27 AM -0400
+# Last Change: Tue Apr 17, 2018 at 12:31 AM -0400
 
 from argparse import ArgumentParser
 
@@ -66,9 +66,9 @@ class InputToPduAction(object):
                     print(self.controller.PowerOffAll())
                 if self.input[0] == 'on':
                     print(self.controller.PowerOnAll())
-                if self.input[2] == 'cycle':
+                if self.input[0] == 'cycle':
                     print(self.controller.PowerCycleAll())
-                if self.input[2] == 'status':
+                if self.input[0] == 'status':
                     print(self.controller.ChsAllStatus())
 
         except AssertionError:
