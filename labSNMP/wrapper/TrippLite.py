@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #
-# Last Change: Tue Apr 17, 2018 at 12:44 AM -0400
+# Last Change: Tue Apr 17, 2018 at 03:15 PM -0400
 
 from pysnmp.hlapi import *
 
@@ -55,7 +55,7 @@ class TrippLiteControl(BasePowerSupplyControl):
     def PowerOffAll(self):
         oid = ObjectType(ObjectIdentity(
             self.MIB,
-            self.bulk_ctrl, '0'
+            self.bulk_ctrl, '1'
         ),
             self.power_status_code['off']
         )
@@ -65,7 +65,7 @@ class TrippLiteControl(BasePowerSupplyControl):
     def PowerOnAll(self):
         oid = ObjectType(ObjectIdentity(
             self.MIB,
-            self.bulk_ctrl, '0'
+            self.bulk_ctrl, '1'
         ),
             self.power_status_code['on']
         )
@@ -75,7 +75,7 @@ class TrippLiteControl(BasePowerSupplyControl):
     def PowerCycleAll(self):
         oid = ObjectType(ObjectIdentity(
             self.MIB,
-            self.bulk_ctrl, '0'
+            self.bulk_ctrl, '1'
         ),
             self.power_status_code['cycle']
         )

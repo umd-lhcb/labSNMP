@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #
-# Last Change: Tue Apr 17, 2018 at 12:53 AM -0400
+# Last Change: Tue Apr 17, 2018 at 04:19 PM -0400
 
 from pysnmp.hlapi import *
 
@@ -9,18 +9,14 @@ from labSNMP.wrapper.base import BiDict, BasePowerSupplyControl
 
 class WienerControl(BasePowerSupplyControl):
     community = 'admin'
-    total_chs = 14
+    total_chs = 12
     power_status_code = BiDict({
         'off': '0',
         'on':  '1',
-        'setVoltageMeasurementOn': '21',
-        'setRippleMeasurementOn':  '22'
     })
 
     MIB = 'WIENER-CRATE-MIB'
     ch_ctrl = 'outputSwitch'
-    ch_voltage = 'outputVoltage'
-    ch_current = 'outputCurrent'
 
     def PowerOffCh(self, ch_num):
         oid = ObjectType(ObjectIdentity(
@@ -53,41 +49,50 @@ class WienerControl(BasePowerSupplyControl):
 
     def PowerOffAll(self):
         status = []
+        status_details = []
         for i in range(1, self.total_chs+1):
-            status.append(self.PowerOffCh(i)[0])
+            value = self.PowerOffCh(i)
+            status.append(value[0])
+            status_details.append(value[1:])
 
         if sum(status) == 0:
-            return [0, ]
+            return [0, status_details]
         else:
-            return [255, ]
+            return [255, status_details]
 
     def PowerOnAll(self):
         status = []
+        status_details = []
         for i in range(1, self.total_chs+1):
-            status.append(self.PowerOnCh(i)[0])
+            value = self.PowerOnCh(i)
+            status.append(value[0])
+            status_details.append(value[1:])
 
         if sum(status) == 0:
-            return [0, ]
+            return [0, status_details]
         else:
-            return [255, ]
+            return [255, status_details]
 
     def PowerCycleAll(self):
-        statusOff = self.PowerOffAll()
-        statusOn = self.PowerOnAll()
+        status = []
+        status_details = []
+        for i in range(1, self.total_chs+1):
+            value = self.PowerCycleCh(i)
+            status.append(value[0])
+            status_details.append(value[1:])
 
-        if statusOn[0] == 0 and statusOff[0] == 0:
-            return [0, ]
+        if sum(status) == 0:
+            return [0, status_details]
         else:
-            return [255, ]
+            return [255, status_details]
 
     def ChStatus(self, ch_num):
-        pass
-        # oid = ObjectType(ObjectIdentity(
-            # self.MIB,
-            # self.ch_status, '1', str(ch_num)
-        # ))
+        oid = ObjectType(ObjectIdentity(
+            self.MIB,
+            self.ch_ctrl, str(ch_num)
+        ))
 
-        # return self.DoCmd(getCmd, oid)
+        return self.DoCmd(getCmd, oid)
 
     def ChsAllStatus(self):
         status = []
