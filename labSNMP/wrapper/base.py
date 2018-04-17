@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #
-# Last Change: Fri Apr 13, 2018 at 12:25 PM -0400
+# Last Change: Mon Apr 16, 2018 at 11:56 PM -0400
 
 from os import environ
 from os.path import dirname, abspath, join
@@ -54,18 +54,21 @@ class BasePowerSupplyControl(object):
 
                 if errorIndication:
                     status.append(1)
-                    return status.append(errorIndication)
+                    status.append(errorIndication)
+                    break
 
                 elif errorStatus:
                     status.append(2)
-                    return status.append(errorStatus)
+                    status.append(errorStatus)
+                    break
 
                 else:
                     status.append(0)
                     for varBind in varBinds:
                         for x in varBind:
                             status.append(x.prettyPrint())
-                    return status
+
+            return status
 
         except Exception as err:
             status.append(255)

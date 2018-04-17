@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #
-# Last Change: Fri Apr 13, 2018 at 12:21 PM -0400
+# Last Change: Mon Apr 16, 2018 at 11:56 PM -0400
 
 from pysnmp.hlapi import *
 
@@ -18,12 +18,16 @@ class TrippLiteControl(BasePowerSupplyControl):
     })
 
     MIB = 'TRIPPLITE-PRODUCTS'
-    ch_ctrl = 'tlpPduOutletComand'
+    ch_ctrl = 'tlpPduOutletCommand'
     bulk_ctrl = 'tlpPduDeviceMainLoadCommand'
     ch_status = 'tlpPduOutletState'
 
     def PowerOffCh(self, ch_num):
-        oidPowerOff = OjectType(ObjectIdentity(self.MIB, self.ch_ctrl),
-                                self.power_status_code['off']
-                                )
+        oidPowerOff = ObjectType(ObjectIdentity(
+            self.MIB,
+            self.ch_ctrl, '1', str(ch_num)
+        ),
+            self.power_status_code['off']
+        )
+
         return self.DoCmd(setCmd, oidPowerOff)
