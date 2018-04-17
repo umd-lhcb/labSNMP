@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #
-# Last Change: Tue Apr 17, 2018 at 12:16 AM -0400
+# Last Change: Tue Apr 17, 2018 at 12:30 AM -0400
 
 from pysnmp.hlapi import *
 
@@ -81,3 +81,22 @@ class TrippLiteControl(BasePowerSupplyControl):
         )
 
         return self.DoCmd(setCmd, oid)
+
+    def ChStatus(self, ch_num):
+        oid = ObjectType(ObjectIdentity(
+            self.MIB,
+            self.ch_status, '1', str(ch_num)
+        ))
+
+        return self.DoCmd(getCmd, oid)
+
+    def ChsAllStatus(self):
+        status = []
+        for i in range(1, 13):
+            oid = ObjectType(ObjectIdentity(
+                self.MIB,
+                self.ch_status, '1', str(i)
+            ))
+
+            status.append(self.DoCmd(getCmd, oid))
+        return status
