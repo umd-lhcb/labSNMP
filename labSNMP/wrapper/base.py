@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #
-# Last Change: Mon Apr 16, 2018 at 11:56 PM -0400
+# Last Change: Sat May 19, 2018 at 01:27 AM -0400
 
 from os import environ
 from os.path import dirname, abspath, join
@@ -15,7 +15,7 @@ class BiDict(dict):
     def __init__(self, *args, **kwargs):
         super(BiDict, self).__init__(*args, **kwargs)
         self.inverse = {}
-        for key, value in self.iteritems():
+        for key, value in self.items():
             self.inverse[value] = key
 
 
