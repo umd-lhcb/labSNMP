@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #
-# Last Change: Tue Apr 10, 2018 at 12:12 AM -0400
+# Last Change: Sat May 19, 2018 at 01:20 AM -0400
 
 import sys
 from pysnmp.hlapi import *
@@ -13,7 +13,7 @@ oidtype = ObjectType(ObjectIdentity('SNMPv2-MIB', 'sysDescr', 0), 'Test')
 # presented in the 'SNMPv2' mib file.
 # An example SNMP server is 'demo.snmplabs.com'
 querycmd = getCmd(SnmpEngine(),
-                  CommunityData('tripplite'),
+                  CommunityData('public'),
                   UdpTransportTarget((sys.argv[1], 161)),
                   ContextData(),
                   oidtype)
