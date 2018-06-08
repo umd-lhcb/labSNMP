@@ -1,6 +1,6 @@
 # labSNMP
-## Prerequisites
-Tested with `Python 2.7.13`.
+A `Python` library to control lab PSUs with SNMP protocol.
+Tested with `Python 3.6.5`.
 If only the command line control is need, use `pip` to install `pysnmp`.
 
 ## Compile a MIB file to a Python file
