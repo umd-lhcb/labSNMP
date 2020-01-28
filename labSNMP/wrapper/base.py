@@ -9,6 +9,18 @@ from pysnmp.smi import builder
 
 py_mib_path = join(dirname(dirname(abspath(__file__))), 'compiled')
 
+def ConvertFloat(num):
+    num=num & 0xFFFFFFFF
+    sign=num >> 31
+    num=num & 0x7FFFFFFF
+    exponent=num >> 23
+    exponent+=-127
+    fraction=0
+    for x in range(1,23,1):
+        fraction+=(num & (1 << (23-x)) > 0) * pow(2,-x)
+    retVal= ((1+fraction)*pow(2,exponent)*(1-2*sign))
+    return retVal
+
 
 class BiDict(dict):
     # NOTE: Here we implicitly assumed that the forward mapping is injective.

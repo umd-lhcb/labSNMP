@@ -4,8 +4,7 @@
 
 from pysnmp.hlapi import *
 
-from labSNMP.wrapper.base import BiDict, BasePowerSupplyControl
-
+from labSNMP.wrapper.base import BiDict, BasePowerSupplyControl, ConvertFloat
 
 class WienerControl(BasePowerSupplyControl):
     community = 'admin'
@@ -17,6 +16,7 @@ class WienerControl(BasePowerSupplyControl):
 
     MIB = 'WIENER-CRATE-MIB'
     ch_ctrl = 'outputSwitch'
+    ch_current= 'outputMeasurementCurrent'
 
     def PowerOffCh(self, ch_num):
         oid = ObjectType(ObjectIdentity(
@@ -93,6 +93,17 @@ class WienerControl(BasePowerSupplyControl):
         ))
 
         return self.DoCmd(getCmd, oid)
+
+    def ChCurrent(self, ch_num):
+        oid = ObjectType(ObjectIdentity(
+            self.MIB,
+            self.ch_current, str(ch_num)
+        ))
+
+        retVal=self.DoCmd(getCmd, oid)
+        if(len(retVal)==3):
+            retVal[2]=ConvertFloat(int(retVal[2],16))
+        return retVal
 
     def ChsAllStatus(self):
         status = []

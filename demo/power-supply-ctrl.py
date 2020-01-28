@@ -62,6 +62,8 @@ class InputToPduAction(object):
                     print(self.controller.PowerCycleCh(self.input[1]))
                 if self.input[2] == 'status':
                     print(self.controller.ChStatus(self.input[1]))
+                if self.input[2] == 'current':
+                    print(self.controller.ChCurrent(self.input[1]))
             else:
                 if self.input[0] == 'off':
                     print(self.controller.PowerOffAll())
@@ -89,7 +91,7 @@ class InputToPduAction(object):
 
     @staticmethod
     def valid_keywords(word):
-        if word in ('off', 'on', 'cycle', 'status'):
+        if word in ('off', 'on', 'cycle', 'status', 'current'):
             return True
         else:
             return False
