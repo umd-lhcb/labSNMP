@@ -2,7 +2,7 @@
 #
 # Last Change: Fri Feb 07, 2020 at 08:28 PM +0800
 
-from pysnmp.hlapi import *
+from pysnmp.hlapi.asyncio import *
 
 from labSNMP.wrapper.base import BiDict, BasePowerSupplyControl, ConvertFloat
 
@@ -19,7 +19,7 @@ class WienerControl(BasePowerSupplyControl):
     ch_ctrl = 'outputSwitch'
     ch_current= 'outputMeasurementCurrent'
 
-    def PowerOffCh(self, ch_num):
+    async def PowerOffCh(self, ch_num):
         oid = ObjectType(ObjectIdentity(
             self.MIB,
             self.ch_ctrl, str(ch_num)
@@ -29,7 +29,7 @@ class WienerControl(BasePowerSupplyControl):
 
         return self.DoCmd(setCmd, oid)
 
-    def PowerOnCh(self, ch_num):
+    async def PowerOnCh(self, ch_num):
         oid = ObjectType(ObjectIdentity(
             self.MIB,
             self.ch_ctrl, str(ch_num)
@@ -39,7 +39,7 @@ class WienerControl(BasePowerSupplyControl):
 
         return self.DoCmd(setCmd, oid)
 
-    def PowerCycleCh(self, ch_num):
+    async def PowerCycleCh(self, ch_num):
         statusOff = self.PowerOffCh(ch_num)
         statusOn = self.PowerOnCh(ch_num)
 
@@ -48,7 +48,7 @@ class WienerControl(BasePowerSupplyControl):
         else:
             return [255, (statusOff, statusOn)]
 
-    def PowerOffAll(self):
+    async def PowerOffAll(self):
         status = []
         status_details = []
         for i in range(1, self.total_chs+1):
@@ -61,7 +61,7 @@ class WienerControl(BasePowerSupplyControl):
         else:
             return [255, status_details]
 
-    def PowerOnAll(self):
+    async def PowerOnAll(self):
         status = []
         status_details = []
         for i in range(1, self.total_chs+1):
@@ -74,7 +74,7 @@ class WienerControl(BasePowerSupplyControl):
         else:
             return [255, status_details]
 
-    def PowerCycleAll(self):
+    async def PowerCycleAll(self):
         status = []
         status_details = []
         for i in range(1, self.total_chs+1):
@@ -87,7 +87,7 @@ class WienerControl(BasePowerSupplyControl):
         else:
             return [255, status_details]
 
-    def ChStatus(self, ch_num):
+    async def ChStatus(self, ch_num):
         oid = ObjectType(ObjectIdentity(
             self.MIB,
             self.ch_ctrl, str(ch_num)
@@ -95,7 +95,7 @@ class WienerControl(BasePowerSupplyControl):
 
         return self.DoCmd(getCmd, oid)
 
-    def ChCurrent(self, ch_num):
+    async def ChCurrent(self, ch_num):
         oid = ObjectType(ObjectIdentity(
             self.MIB,
             self.ch_current, str(ch_num)
@@ -106,7 +106,7 @@ class WienerControl(BasePowerSupplyControl):
             retVal[2]=ConvertFloat(int(retVal[2],16))
         return retVal
 
-    def ChsAllStatus(self):
+    async def ChsAllStatus(self):
         status = []
         for i in range(1, self.total_chs+1):
             status.append(self.ChStatus(i))
