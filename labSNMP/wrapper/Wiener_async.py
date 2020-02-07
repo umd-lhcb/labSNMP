@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #
-# Last Change: Fri Feb 07, 2020 at 09:03 PM +0800
+# Last Change: Fri Feb 07, 2020 at 10:43 PM +0800
 
 from pysnmp.hlapi.asyncio import *
 
@@ -104,7 +104,7 @@ class WienerControl(BasePowerSupplyControl):
         ret_val = self.DoCmd(getCmd, oid)
         if(len(ret_val) == 3):
             ret_val[2] = convert_float(int(ret_val[2], 16))
-        return retVal
+        return ret_val
 
     async def ChsAllStatus(self):
         status = []
