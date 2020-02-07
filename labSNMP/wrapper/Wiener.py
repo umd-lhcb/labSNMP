@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 #
-# Last Change: Fri Feb 07, 2020 at 08:28 PM +0800
+# Last Change: Fri Feb 07, 2020 at 09:02 PM +0800
 
 from pysnmp.hlapi import *
 
-from labSNMP.wrapper.base import BiDict, BasePowerSupplyControl, ConvertFloat
+from labSNMP.wrapper.base import BiDict, BasePowerSupplyControl, convert_float
 
 
 class WienerControl(BasePowerSupplyControl):
@@ -101,9 +101,9 @@ class WienerControl(BasePowerSupplyControl):
             self.ch_current, str(ch_num)
         ))
 
-        retVal=self.DoCmd(getCmd, oid)
-        if(len(retVal)==3):
-            retVal[2]=ConvertFloat(int(retVal[2],16))
+        ret_val = self.DoCmd(getCmd, oid)
+        if(len(ret_val) == 3):
+            ret_val[2] = convert_float(int(ret_val[2], 16))
         return retVal
 
     def ChsAllStatus(self):

@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #
-# Last Change: Sat May 19, 2018 at 01:27 AM -0400
+# Last Change: Fri Feb 07, 2020 at 09:01 PM +0800
 
 from os import environ
 from os.path import dirname, abspath, join
@@ -9,17 +9,20 @@ from pysnmp.smi import builder
 
 py_mib_path = join(dirname(dirname(abspath(__file__))), 'compiled')
 
-def ConvertFloat(num):
-    num=num & 0xFFFFFFFF
-    sign=num >> 31
-    num=num & 0x7FFFFFFF
-    exponent=num >> 23
-    exponent+=-127
-    fraction=0
-    for x in range(1,23,1):
-        fraction+=(num & (1 << (23-x)) > 0) * pow(2,-x)
-    retVal= ((1+fraction)*pow(2,exponent)*(1-2*sign))
-    return retVal
+
+def convert_float(num):
+    num = num & 0xFFFFFFFF
+    sign = num >> 31
+    num = num & 0x7FFFFFFF
+    exponent = num >> 23
+    exponent += -127
+    fraction = 0
+
+    for x in range(1, 23, 1):
+        fraction += (num & (1 << (23-x)) > 0) * pow(2, -x)
+
+    ret_val = ((1+fraction) * pow(2, exponent) * (1-2*sign))
+    return ret_val
 
 
 class BiDict(dict):
