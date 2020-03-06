@@ -1,13 +1,13 @@
 #!/usr/bin/env python
 #
-# Last Change: Fri Feb 07, 2020 at 08:27 PM +0800
+# Last Change: Fri Mar 06, 2020 at 10:48 PM +0800
 
 from pysnmp.hlapi.asyncio import *
 
-from labSNMP.wrapper.base import BiDict, BasePowerSupplyControl
+from labSNMP.wrapper.base import BiDict, BasePowerSupplyControlAsync
 
 
-class TrippLiteControl(BasePowerSupplyControl):
+class TrippLiteControl(BasePowerSupplyControlAsync):
     community = 'tripplite'
     total_chs = 14
     power_status_code = BiDict({
@@ -30,7 +30,8 @@ class TrippLiteControl(BasePowerSupplyControl):
             self.power_status_code['off']
         )
 
-        return self.DoCmd(setCmd, oid)
+        status = await self.DoCmd(setCmd, oid)
+        return status
 
     async def PowerOnCh(self, ch_num):
         oid = ObjectType(ObjectIdentity(
@@ -40,7 +41,8 @@ class TrippLiteControl(BasePowerSupplyControl):
             self.power_status_code['on']
         )
 
-        return self.DoCmd(setCmd, oid)
+        status = await self.DoCmd(setCmd, oid)
+        return status
 
     async def PowerCycleCh(self, ch_num):
         oid = ObjectType(ObjectIdentity(
@@ -50,7 +52,8 @@ class TrippLiteControl(BasePowerSupplyControl):
             self.power_status_code['cycle']
         )
 
-        return self.DoCmd(setCmd, oid)
+        status = await self.DoCmd(setCmd, oid)
+        return status
 
     async def PowerOffAll(self):
         oid = ObjectType(ObjectIdentity(
@@ -60,7 +63,8 @@ class TrippLiteControl(BasePowerSupplyControl):
             self.power_status_code['off']
         )
 
-        return self.DoCmd(setCmd, oid)
+        status = await self.DoCmd(setCmd, oid)
+        return status
 
     async def PowerOnAll(self):
         oid = ObjectType(ObjectIdentity(
@@ -70,7 +74,8 @@ class TrippLiteControl(BasePowerSupplyControl):
             self.power_status_code['on']
         )
 
-        return self.DoCmd(setCmd, oid)
+        status = await self.DoCmd(setCmd, oid)
+        return status
 
     async def PowerCycleAll(self):
         oid = ObjectType(ObjectIdentity(
@@ -80,7 +85,8 @@ class TrippLiteControl(BasePowerSupplyControl):
             self.power_status_code['cycle']
         )
 
-        return self.DoCmd(setCmd, oid)
+        status = await self.DoCmd(setCmd, oid)
+        return status
 
     async def ChStatus(self, ch_num):
         oid = ObjectType(ObjectIdentity(
@@ -88,10 +94,12 @@ class TrippLiteControl(BasePowerSupplyControl):
             self.ch_status, '1', str(ch_num)
         ))
 
-        return self.DoCmd(getCmd, oid)
+        status = await self.DoCmd(getCmd, oid)
+        return status
 
     async def ChsAllStatus(self):
         status = []
         for i in range(1, self.total_chs+1):
-            status.append(self.ChStatus(i))
+            ch_status = await self.ChStatus(i)
+            status.append(ch_status)
         return status

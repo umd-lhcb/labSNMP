@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #
-# Last Change: Fri Feb 07, 2020 at 09:01 PM +0800
+# Last Change: Fri Mar 06, 2020 at 10:41 PM +0800
 
 from os import environ
 from os.path import dirname, abspath, join
@@ -83,11 +83,11 @@ class BasePowerSupplyControl(object):
                         for x in varBind:
                             status.append(x.prettyPrint())
 
-            return status
-
         except Exception as err:
             status.append(255)
-            return status.append(err)
+            status.append(err)
+
+        return status
 
     def PowerOffCh(self, ch_num):
         pass
@@ -111,4 +111,72 @@ class BasePowerSupplyControl(object):
         pass
 
     def ChsAllStatus(self):
+        pass
+
+
+class BasePowerSupplyControlAsync(BasePowerSupplyControl):
+    async def DoCmd(self, cmd, oidtype):
+        snmp_engine = SnmpEngine()
+        queryCmd = await cmd(
+            snmp_engine,
+            CommunityData(self.community),
+            UdpTransportTarget((self.ip, 161)),
+            ContextData(),
+            oidtype
+        )
+        status = []
+
+        try:
+            for (errorIndication,
+                 errorStatus,
+                 errorIndex,
+                 varBinds) in queryCmd:
+
+                if errorIndication:
+                    status.append(1)
+                    status.append(errorIndication)
+                    break
+
+                elif errorStatus:
+                    status.append(2)
+                    status.append(errorStatus)
+                    break
+
+                else:
+                    status.append(0)
+                    for varBind in varBinds:
+                        for x in varBind:
+                            status.append(x.prettyPrint())
+
+        except Exception as err:
+            status.append(255)
+            status.append(err)
+
+        finally:
+            snmp_engine.transportDispatcher.closeDispatcher()
+
+        return status
+
+    async def PowerOffCh(self, ch_num):
+        pass
+
+    async def PowerOnCh(self, ch_num):
+        pass
+
+    async def PowerCycleCh(self, ch_num):
+        pass
+
+    async def PowerOffAll(self):
+        pass
+
+    async def PowerOnAll(self):
+        pass
+
+    async def PowerCycleAll(self):
+        pass
+
+    async def ChStatus(self, ch_num):
+        pass
+
+    async def ChsAllStatus(self):
         pass
