@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #
-# Last Change: Fri Feb 07, 2020 at 07:48 PM +0800
+# Last Change: Tue Jun 23, 2020 at 04:33 PM +0800
 
 name = 'labSNMP'
-version = '0.1.0'
+version = '0.2.0'
