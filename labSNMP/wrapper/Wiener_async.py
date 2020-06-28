@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #
-# Last Change: Fri Mar 06, 2020 at 10:45 PM +0800
+# Last Change: Sun Jun 28, 2020 at 02:43 AM +0800
 
 from pysnmp.hlapi.asyncio import *
 
@@ -18,7 +18,7 @@ class WienerControl(BasePowerSupplyControlAsync):
 
     MIB = 'WIENER-CRATE-MIB'
     ch_ctrl = 'outputSwitch'
-    ch_current= 'outputMeasurementCurrent'
+    ch_current = 'outputMeasurementCurrent'
 
     async def PowerOffCh(self, ch_num):
         oid = ObjectType(ObjectIdentity(

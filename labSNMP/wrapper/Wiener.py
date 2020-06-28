@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #
-# Last Change: Fri Feb 07, 2020 at 10:43 PM +0800
+# Last Change: Sun Jun 28, 2020 at 02:43 AM +0800
 
 from pysnmp.hlapi import *
 
@@ -17,7 +17,7 @@ class WienerControl(BasePowerSupplyControl):
 
     MIB = 'WIENER-CRATE-MIB'
     ch_ctrl = 'outputSwitch'
-    ch_current= 'outputMeasurementCurrent'
+    ch_current = 'outputMeasurementCurrent'
 
     def PowerOffCh(self, ch_num):
         oid = ObjectType(ObjectIdentity(
