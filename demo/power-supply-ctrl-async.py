@@ -2,13 +2,14 @@
 #
 # Last Change: Sun Jun 28, 2020 at 09:37 PM +0800
 
+import asyncio
 from argparse import ArgumentParser
 
 import sys
 sys.path.insert(0, '..')
 
-from labSNMP.wrapper.TrippLite import TrippLiteControl
-from labSNMP.wrapper.Wiener import WienerControl
+from labSNMP.wrapper.TrippLite_async import TrippLiteControl
+from labSNMP.wrapper.Wiener_async import WienerControl
 
 
 def parse_input():
@@ -50,29 +51,29 @@ class InputToPduAction(object):
         self.controller = controller
         self.input = input
 
-    def do(self):
+    async def do(self):
         try:
             assert self.check_input_validity()
             if len(self.input) == 3:
                 if self.input[2] == 'off':
-                    print(self.controller.PowerOffCh(self.input[1]))
+                    print(await self.controller.PowerOffCh(self.input[1]))
                 if self.input[2] == 'on':
-                    print(self.controller.PowerOnCh(self.input[1]))
+                    print(await self.controller.PowerOnCh(self.input[1]))
                 if self.input[2] == 'cycle':
-                    print(self.controller.PowerCycleCh(self.input[1]))
+                    print(await self.controller.PowerCycleCh(self.input[1]))
                 if self.input[2] == 'status':
-                    print(self.controller.ChStatus(self.input[1]))
+                    print(await self.controller.ChStatus(self.input[1]))
                 if self.input[2] == 'current':
-                    print(self.controller.ChCurrent(self.input[1]))
+                    print(await self.controller.ChCurrent(self.input[1]))
             else:
                 if self.input[0] == 'off':
-                    print(self.controller.PowerOffAll())
+                    print(await self.controller.PowerOffAll())
                 if self.input[0] == 'on':
-                    print(self.controller.PowerOnAll())
+                    print(await self.controller.PowerOnAll())
                 if self.input[0] == 'cycle':
-                    print(self.controller.PowerCycleAll())
+                    print(await self.controller.PowerCycleAll())
                 if self.input[0] == 'status':
-                    print(self.controller.ChsAllStatus())
+                    print(await self.controller.ChsAllStatus())
 
         except AssertionError:
             print('Invalid input: %s' % self.input)
@@ -107,4 +108,4 @@ if __name__ == "__main__":
         controller = WienerControl(args.host[0])
         worker = InputToPduAction(controller, args.action)
 
-    worker.do()
+    asyncio.run(worker.do())
