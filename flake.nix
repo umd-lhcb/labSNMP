@@ -19,12 +19,13 @@
         };
         python = pkgs.python3;
         pythonPackages = python.pkgs;
+        stdenv = pkgs.stdenv;
       in
       {
         devShell = pkgs.mkShell {
           name = "labSNMP";
           buildInputs = with pythonPackages; [
-            pysnmp
+            pkgs.pythonPackages.labSNMP
           ]
           ++ stdenv.lib.optionals (stdenv.isx86_64) [
             # Python auto-complete

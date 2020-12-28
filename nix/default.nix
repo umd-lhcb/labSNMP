@@ -1,17 +1,14 @@
 { stdenv
 , buildPythonPackage
-, root
-, pyyaml
-, lark-parser
+, pysnmp
 }:
 
 buildPythonPackage rec {
-  pname = "pyBabyMaker";
+  pname = "labSNMP";
   version = "0.2.1";
 
   src = builtins.path { path = ./..; name = pname; };
 
-  buildInputs = [ root ];
   propagatedBuildInputs = [
     pysnmp
   ];
