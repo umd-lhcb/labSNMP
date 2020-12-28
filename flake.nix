@@ -25,7 +25,7 @@
         devShell = pkgs.mkShell {
           name = "labSNMP";
           buildInputs = with pythonPackages; [
-            pkgs.pythonPackages.labSNMP
+            labSNMP
           ]
           ++ stdenv.lib.optionals (stdenv.isx86_64) [
             # Python auto-complete
