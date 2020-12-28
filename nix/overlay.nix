@@ -6,7 +6,7 @@ let
         packageOverrides = self.lib.composeExtensions
           (old.packageOverrides or (_: _: { }))
           overlay;
-    }));
+      }));
   };
 in
 pythonPackageOverlay
