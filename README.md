@@ -5,7 +5,7 @@ A `Python` library to control lab PSUs with SNMP protocol.
 - Use `pip` to install `pysnmp`
 - If you have `nix` with flake support enabled:
     ```
-    nix flake develop
+    nix develop
     ```
 
 ## Wrapper Usage
